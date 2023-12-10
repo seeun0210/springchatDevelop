@@ -10,6 +10,7 @@ import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 
 import java.util.List;
 
@@ -18,7 +19,8 @@ import java.util.List;
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-    registry.enableSimpleBroker("/user");
+//        registry.enableSimpleBroker("/topic");
+        registry.enableSimpleBroker("/user");
     registry.setApplicationDestinationPrefixes(("/app"));
     registry.setUserDestinationPrefix(("/user"));
     }
@@ -38,5 +40,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         converter.setContentTypeResolver(resolver);
         messageConverters.add(converter);
         return false;
+    }
+    @Override
+    public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
+        registration.setMessageSizeLimit(1024 * 1024); // 크기 제한을 필요에 따라 조절
+        registration.setSendBufferSizeLimit(1024 * 1024); // 크기 제한을 필요에 따라 조절
+        registration.setSendTimeLimit(20000); // 타임아웃을 필요에 따라 조절
     }
 }

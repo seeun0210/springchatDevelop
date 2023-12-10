@@ -25,7 +25,7 @@ public class ChatMessageService {
 
     public List<ChatMessage> findChatMessages(String senderId, String recipientId) {
         var chatId = chatRoomService.getChatRoomId(senderId, recipientId, false);
-        return chatId.map(id -> chatMessageRepository.findByChatId(id))
+        return chatId.map(chatMessageRepository::findByChatId)
                 .orElse(new ArrayList<>());
     }
 
